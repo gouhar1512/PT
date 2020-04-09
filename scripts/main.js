@@ -2,41 +2,83 @@ function addSubTopic() {
   let subTopicsContainer = document.getElementsByClassName(
     "sub-topics-container"
   )[0];
-  let subTopicName = document.getElementById("sub-topic-name").value;
+  let subTopicName = "Introduction"; //document.getElementById("sub-topic-name").value;
 
-  //Creating elements
-  let subTopic = document.createElement("DIV");
-  let headingLg = document.createElement("DIV");
-  let textNode = document.createTextNode(subTopicName);
-  let done = document.createElement("DIV");
-  let headingSm = document.createElement("SPAN");
+  var temp = document.getElementById("templateForSubtopic");
+  var clon = temp.content.cloneNode(true);
+  subTopicsContainer.appendChild(clon);
+  let headingLg = document.getElementsByClassName("heading-lg");
+  let lastIndex = headingLg.length - 1;
+  headingLg[lastIndex].innerText = subTopicName;
+}
+addSubTopic();
 
-  //Adding classname
-  subTopic.classList.add("sub-topic");
-  headingLg.classList.add("heading-lg");
-
-  //Appending elements
-  headingLg.appendChild(textNode);
-  subTopic.appendChild(headingLg);
-  subTopicsContainer.appendChild(subTopic);
+///////   String utility functions   //////////
+function toCamelCase(str) {
+  let upperCase = true;
+  for (let i = 0; i < str.length; i++) {
+    if (upperCase) {
+      str[i] = str[i].toUpperCase();
+      upperCase = false;
+    }
+    if (str[i] == " ") {
+      upperCase = true;
+    }
+  }
+  return str;
 }
 
-/*
- <div class="sub-topic">
-   
-   <div class="done progress-container"><span class="heading-sm">Done :</span> </div>
-   <div class="todo progress-container"><span class="heading-sm">To Do :</span> </div>
-   <div class="optionals progress-container"><span class="heading-sm">Optionals : </span></div>
-   <div class="doubts progress-container"><span class="heading-sm">Doubts</span></div>
-   <div class="all-questions">
-      <span class="heading-sm">All questions</span>
-      <div class="prev-questions">
+function toStringForm(arr) {
+  let str = "";
+  for (let i = 0; i < arr.length; i++) {
+    str += arr[i];
+  }
+  return str;
+}
+////////////////////////////////////////////////
 
-      </div>
-      <div class="new-questions">
-         <textarea class="questions-link"></textarea>
-         <button>Add</button>
-      </div>
-   </div>
-</div>
- */
+function getTopicNameFromUrl(url) {
+  let lastIndex = url.length - 1;
+  let topicName = [];
+  for (let i = lastIndex - 1; i >= 0; i--) {
+    if (url[i] == "/") {
+      break;
+    }
+    if (url[i] == "-") {
+      topicName.push(" ");
+    } else {
+      topicName.push(url[i]);
+    }
+  }
+  topicName = topicName.reverse();
+  topicName = toCamelCase(topicName);
+  topicName = toStringForm(topicName);
+  return topicName;
+}
+
+function addLinks() {
+  let questionsLinksContainer = document.getElementsByClassName(
+    "questions-links-container"
+  )[0];
+  let questionsLinks = questionsLinksContainer.value.split("\n");
+  if (questionsLinks == "") {
+    return;
+  }
+  let prevQuestions = document.getElementsByClassName("prev-questions")[0];
+  for (let i = 0; i < questionsLinks.length; i++) {
+    let heading = getTopicNameFromUrl(questionsLinks[i]);
+    prevQuestions.innerText += heading + "\n";
+  }
+  questionsLinksContainer.value = "";
+}
+
+// function getLinks() {
+//   let linksContainer = document.getElementsByClassName("Introduction")[0];
+//   let links = linksContainer.getElementsByTagName("a");
+//   let linksArr = [];
+//   for (let i = 0; i < links.length; i++) {
+//     linksArr.push(links[i].href);
+//     document.write(links[i] + "<br>");
+//   }
+// }
+// getLinks();

@@ -8,10 +8,10 @@
    <link rel="stylesheet" href="styles/style.css" />
 </head>
 
-<template>
+<template id="templateForSubtopic">
    <div class="sub-topic">
       <div class="heading-lg">
-         Introduction
+
       </div>
       <div class="done progress-container"><span class="heading-sm">Done :</span> </div>
       <div class="todo progress-container"><span class="heading-sm">To Do :</span> </div>
@@ -23,8 +23,26 @@
 
          </div>
          <div class="new-questions">
-            <textarea class="questions-link"></textarea>
-            <button>Add</button>
+            <textarea class="questions-links-container">
+https://www.geeksforgeeks.org/binary-tree-set-1-introduction/
+https://www.geeksforgeeks.org/binary-tree-set-2-properties/
+https://www.geeksforgeeks.org/binary-tree-set-3-types-of-binary-tree/
+https://www.geeksforgeeks.org/handshaking-lemma-and-interesting-tree-properties/
+https://www.geeksforgeeks.org/enumeration-of-binary-trees/
+https://www.geeksforgeeks.org/insertion-binary-tree/
+https://www.geeksforgeeks.org/deletion-binary-tree/
+https://www.geeksforgeeks.org/bfs-vs-dfs-binary-tree/
+https://www.geeksforgeeks.org/binary-tree-array-implementation/
+https://www.geeksforgeeks.org/avl-with-duplicate-keys/
+https://www.geeksforgeeks.org/applications-of-tree-data-structure/
+https://www.geeksforgeeks.org/applications-of-minimum-spanning-tree/
+https://www.geeksforgeeks.org/continuous-tree/
+https://www.geeksforgeeks.org/foldable-binary-trees/
+https://www.geeksforgeeks.org/expression-tree/
+https://www.geeksforgeeks.org/evaluation-of-expression-tree/
+https://www.geeksforgeeks.org/symmetric-tree-tree-which-is-mirror-image-of-itself/
+            </textarea>
+            <button onclick="addLinks()">Add</button>
          </div>
       </div>
    </div>
