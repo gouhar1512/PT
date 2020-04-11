@@ -1,47 +1,119 @@
-function addSubTopic() {
-  if (typeof addSubTopic.index == "undefined") {
-    addSubTopic.index = 0;
+let activeTopic = "Linked List";
+let activeSubtopic = "";
+$(document).ready(() => {
+  initializeLocalStorage();
+
+  let topicBtns = $(".topic-btn");
+  topicBtns.click(() => {
+    highlightActiveTopicBtn(topicBtns);
+    setActiveTopic();
+    showActiveTopic();
+  });
+});
+
+function initializeLocalStorage() {
+  if (localStorage.getItem("myJsonData") == null) {
+    let jsonData = {
+      "Linked List": {},
+      "Binary Trees": {},
+      "Binary Search Trees": {}
+    };
+    localStorage.setItem("myJsonData", JSON.stringify(jsonData));
   }
+}
 
+function highlightActiveTopicBtn(topicBtns) {
+  let currBtn = event.target;
+  for (let i = 0; i < topicBtns.length; i++) {
+    if (currBtn == topicBtns[i]) {
+      topicBtns[i].style.backgroundColor = "yellow";
+    } else {
+      topicBtns[i].style.backgroundColor = "wheat";
+    }
+  }
+}
+
+function setActiveTopic() {
+  let currBtn = event.target;
+  activeTopic = currBtn.innerText;
+}
+
+function showActiveTopic() {
+  let data = localStorage.getItem("myJsonData");
+  jsonData = JSON.parse(data);
+  for (var topicName in jsonData) {
+    if (topicName == activeTopic) {
+      showAllSubtopics(topicName);
+    }
+  }
+}
+
+function updateJsonData(type, key) {
+  let data = localStorage.getItem("myJsonData");
+  jsonData = JSON.parse(data);
+  let statusObj = {
+    All: [],
+    Done: [],
+    "To do": [],
+    Optional: [],
+    Doubt: []
+  };
+
+  switch (type) {
+    case "sub-topic":
+      if (jsonData[activeTopic][key] == null) {
+        jsonData[activeTopic][key] = {};
+        jsonData[activeTopic][key] = statusObj;
+      }
+      break;
+  }
+  document.getElementById("json-viewer").value = JSON.stringify(jsonData);
+  localStorage.setItem("myJsonData", JSON.stringify(jsonData));
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+function clearSubTopicsContainer() {
   let subTopicsContainer = $(".sub-topics-container")[0];
-  let subTopicName = $("#sub-topic-name").val();
+  subTopicsContainer.innerHTML = "";
+}
 
+function showAllSubtopics(topicName) {
+  clearSubTopicsContainer();
+  let index = 0;
+  for (var subTopicName in jsonData[topicName]) {
+    addSubTopic(subTopicName, index);
+    index++;
+  }
+}
+
+function addSubTopic(subTopicName, index) {
+  let subTopicsContainer = $(".sub-topics-container")[0];
+
+  if (subTopicName == undefined) {
+    subTopicName = $("#sub-topic-name").val();
+    index = subTopicsContainer.querySelectorAll(".sub-topic").length;
+  }
   let templateForSubTopic = document.getElementById("templateForSubtopic");
   var clon = templateForSubTopic.content.cloneNode(true);
   subTopicsContainer.appendChild(clon);
 
   let headingLg = $(".heading-lg");
-  let index = addSubTopic.index;
 
   headingLg[index].innerText = subTopicName;
-  addSubTopic.index++;
-}
-addSubTopic();
-////////////////////////////////////////////////
-///////   String utility functions   //////////
-function toTitleCase(arr) {
-  let upperCase = true;
-  for (let i = 0; i < arr.length; i++) {
-    if (upperCase) {
-      arr[i] = arr[i].toUpperCase();
-      upperCase = false;
-    }
-    if (arr[i] == " ") {
-      upperCase = true;
-    }
-  }
-  return arr;
+
+  updateJsonData("sub-topic", subTopicName);
 }
 
-function toStringForm(arr) {
-  let str = "";
-  for (let i = 0; i < arr.length; i++) {
-    str += arr[i];
-  }
-  return str;
+///////////////////////////////   String utility functions   ///////////////////////////////////
+
+function toTitleCase(str) {
+  return str.replace(/(?:^|\s)\w/g, function(match) {
+    return match.toUpperCase();
+  });
 }
-////////////////////////////////////////////////
-////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////////////////////
 
 function getTopicNameFromUrl(url) {
   let lastIndex = url.length - 1;
@@ -57,10 +129,26 @@ function getTopicNameFromUrl(url) {
     }
   }
   topicName = topicName.reverse();
+  topicName = topicName.join().replace(new RegExp(",", "g"), "");
   topicName = toTitleCase(topicName);
-  topicName = toStringForm(topicName);
   return topicName;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+function toggleQuestionLinkContainer(index) {
+  let currTextBox = $(".questions-links-container")[index];
+  let currBtn = $(".add-btn")[index];
+  if (currBtn.innerText == "Add Questions") {
+    currTextBox.style.display = "block";
+    currBtn.innerText = "Add";
+  } else {
+    currTextBox.style.display = "none";
+    currBtn.innerText = "Add Questions";
+  }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////
 
 function addQuestions() {
   let currBtn = event.target;
@@ -74,8 +162,14 @@ function addQuestions() {
       break;
     }
   }
-  let questionsLinksContainer = $(".questions-links-container")[index]; //corresponds to textbox
 
+  toggleQuestionLinkContainer(index);
+
+  if (currBtn.innerText == "Add") {
+    return;
+  }
+
+  let questionsLinksContainer = $(".questions-links-container")[index]; //corresponds to textbox
   let questionsLinks = questionsLinksContainer.value.split("\n"); //getting each question link from textbox into an array
   if (questionsLinks == "") {
     return;
@@ -100,14 +194,16 @@ function addQuestions() {
   }
   questionsLinksContainer.value = "";
 }
+////////////////////////////////////////////////////////////////////////////////////////////////
 
-// function getLinks() {
-//   let linksContainer = document.getElementsByClassName("Introduction")[0];
-//   let links = linksContainer.getElementsByTagName("a");
-//   let linksArr = [];
-//   for (let i = 0; i < links.length; i++) {
-//     linksArr.push(links[i].href);
-//     document.write(links[i] + "<br>");
-//   }
-// }
-// getLinks();
+/*function getLinks() {
+  let linksContainer = document.getElementsByClassName("Introduction")[0];
+  let links = linksContainer.getElementsByTagName("a");
+  let linksArr = [];
+  for (let i = 0; i < links.length; i++) {
+    linksArr.push(links[i].href);
+    document.write(links[i] + "<br>");
+  }
+}
+getLinks();
+*/

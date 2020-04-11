@@ -42,7 +42,7 @@ https://www.geeksforgeeks.org/expression-tree/
 https://www.geeksforgeeks.org/evaluation-of-expression-tree/
 https://www.geeksforgeeks.org/symmetric-tree-tree-which-is-mirror-image-of-itself/</textarea>
 
-            <button onclick="addQuestions()" class="add-btn">Add</button>
+            <button onclick="addQuestions()" class="add-btn">Add Questions</button>
          </div>
       </div>
    </div>
@@ -64,11 +64,9 @@ https://www.geeksforgeeks.org/symmetric-tree-tree-which-is-mirror-image-of-itsel
 
 <body>
    <div class="topics-container">
-      <button>Linked List</button>
-      <button>Binary Trees</button>
-      <button>Binary Search Trees</button>
-      <button>Doubly Linked List</button>
-      <button>Circular Linked List</button>
+      <button class="topic-btn">Linked List</button>
+      <button class="topic-btn">Binary Trees</button>
+      <button class="topic-btn">Binary Search Trees</button>
    </div>
    <div class="status-container">
       <div class="sub-topics-container">
@@ -76,10 +74,13 @@ https://www.geeksforgeeks.org/symmetric-tree-tree-which-is-mirror-image-of-itsel
       </div>
 
       <div>
-         <input id="sub-topic-name" placeholder="Enter sub-topic">
+         <input id="sub-topic-name" placeholder="Enter sub-topic" value="single">
          <button onclick="addSubTopic()">Add Sub Topics + </button>
       </div>
    </div>
+   <textarea id="json-viewer" style="width: 500px;height: 100px;">
+
+   </textarea>
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
    <script src="scripts/main.js"></script>
 </body>
