@@ -54,3 +54,22 @@ button {
   height: 200px;
   resize: none;
 }
+
+.question {
+  display: grid;
+  grid-template-columns: 40% auto;
+  margin: 5px;
+}
+.question-link {
+  background-color: silver;
+  padding: 5px;
+}
+.question-link:hover {
+  background-color: skyblue;
+}
+
+.question-actions {
+  background-color: silver;
+  width: fit-content;
+  padding: 5px;
+}

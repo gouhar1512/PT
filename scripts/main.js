@@ -1,31 +1,36 @@
 function addSubTopic() {
-  let subTopicsContainer = document.getElementsByClassName(
-    "sub-topics-container"
-  )[0];
-  let subTopicName = "Introduction"; //document.getElementById("sub-topic-name").value;
+  if (typeof addSubTopic.index == "undefined") {
+    addSubTopic.index = 0;
+  }
 
-  var temp = document.getElementById("templateForSubtopic");
-  var clon = temp.content.cloneNode(true);
+  let subTopicsContainer = $(".sub-topics-container")[0];
+  let subTopicName = $("#sub-topic-name").val();
+
+  let templateForSubTopic = document.getElementById("templateForSubtopic");
+  var clon = templateForSubTopic.content.cloneNode(true);
   subTopicsContainer.appendChild(clon);
-  let headingLg = document.getElementsByClassName("heading-lg");
-  let lastIndex = headingLg.length - 1;
-  headingLg[lastIndex].innerText = subTopicName;
+
+  let headingLg = $(".heading-lg");
+  let index = addSubTopic.index;
+
+  headingLg[index].innerText = subTopicName;
+  addSubTopic.index++;
 }
 addSubTopic();
-
+////////////////////////////////////////////////
 ///////   String utility functions   //////////
-function toCamelCase(str) {
+function toTitleCase(arr) {
   let upperCase = true;
-  for (let i = 0; i < str.length; i++) {
+  for (let i = 0; i < arr.length; i++) {
     if (upperCase) {
-      str[i] = str[i].toUpperCase();
+      arr[i] = arr[i].toUpperCase();
       upperCase = false;
     }
-    if (str[i] == " ") {
+    if (arr[i] == " ") {
       upperCase = true;
     }
   }
-  return str;
+  return arr;
 }
 
 function toStringForm(arr) {
@@ -35,6 +40,7 @@ function toStringForm(arr) {
   }
   return str;
 }
+////////////////////////////////////////////////
 ////////////////////////////////////////////////
 
 function getTopicNameFromUrl(url) {
@@ -51,23 +57,46 @@ function getTopicNameFromUrl(url) {
     }
   }
   topicName = topicName.reverse();
-  topicName = toCamelCase(topicName);
+  topicName = toTitleCase(topicName);
   topicName = toStringForm(topicName);
   return topicName;
 }
 
-function addLinks() {
-  let questionsLinksContainer = document.getElementsByClassName(
-    "questions-links-container"
-  )[0];
-  let questionsLinks = questionsLinksContainer.value.split("\n");
+function addQuestions() {
+  let currBtn = event.target;
+  let index;
+  let totalQuestions = 0;
+  for (let i = 0; i < $(".add-btn").length; i++) {
+    totalQuestions += $(".prev-questions")[i].querySelectorAll(".question")
+      .length;
+    if (currBtn == $(".add-btn")[i]) {
+      index = i;
+      break;
+    }
+  }
+  let questionsLinksContainer = $(".questions-links-container")[index]; //corresponds to textbox
+
+  let questionsLinks = questionsLinksContainer.value.split("\n"); //getting each question link from textbox into an array
   if (questionsLinks == "") {
     return;
   }
-  let prevQuestions = document.getElementsByClassName("prev-questions")[0];
+
+  let prevQuestions = $(".prev-questions")[index];
+  //div which contains questions already present and new questions can be appended to it
+
   for (let i = 0; i < questionsLinks.length; i++) {
-    let heading = getTopicNameFromUrl(questionsLinks[i]);
-    prevQuestions.innerText += heading + "\n";
+    let templateForQuestion = document.getElementById("templateForQuestion");
+    let clon = templateForQuestion.content.cloneNode(true);
+    prevQuestions.appendChild(clon);
+
+    let questionName = getTopicNameFromUrl(questionsLinks[i]);
+    let questionLink = $(".question-link"); //correspond to span in templateForQuestion
+    let questionNum = $(".prev-questions")[index].querySelectorAll(".question")
+      .length;
+
+    questionLink[
+      totalQuestions + i
+    ].innerHTML = ` ${questionNum}. <a href="${questionsLinks[index]}" target="_blank">${questionName}</a>`;
   }
   questionsLinksContainer.value = "";
 }
