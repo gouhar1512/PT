@@ -1,5 +1,4 @@
 let activeTopic = "Linked List";
-let activeSubtopic = "";
 $(document).ready(() => {
   initializeLocalStorage();
 
@@ -49,6 +48,11 @@ function showActiveTopic() {
 }
 
 function updateJsonData(type, key) {
+  if (type == undefined) {
+    localStorage.setItem("myJsonData", JSON.stringify(jsonData));
+    return;
+  }
+
   let data = localStorage.getItem("myJsonData");
   jsonData = JSON.parse(data);
   let statusObj = {
@@ -82,27 +86,49 @@ function showAllSubtopics(topicName) {
   clearSubTopicsContainer();
   let index = 0;
   for (var subTopicName in jsonData[topicName]) {
-    addSubTopic(subTopicName, index);
+    showSubTopic(subTopicName, index);
     index++;
   }
 }
 
-function addSubTopic(subTopicName, index) {
+function showSubTopic(subTopicName, index) {
   let subTopicsContainer = $(".sub-topics-container")[0];
 
-  if (subTopicName == undefined) {
-    subTopicName = $("#sub-topic-name").val();
-    index = subTopicsContainer.querySelectorAll(".sub-topic").length;
-  }
   let templateForSubTopic = document.getElementById("templateForSubtopic");
   var clon = templateForSubTopic.content.cloneNode(true);
   subTopicsContainer.appendChild(clon);
 
   let headingLg = $(".heading-lg");
-
   headingLg[index].innerText = subTopicName;
 
+  showQuestions(subTopicName, index);
+}
+
+function showQuestions(subTopic, index) {
+  let prevQuestions = $(".prev-questions")[index];
+  prevQuestions.innerHTML = "";
+  //div which contains questions already present and new questions can be appended to it
+
+  let questionsLinks = jsonData[activeTopic][subTopic]["All"];
+
+  for (let i = 0; i < questionsLinks.length; i++) {
+    let templateForQuestion = document.getElementById("templateForQuestion");
+    let clon = templateForQuestion.content.cloneNode(true);
+    prevQuestions.appendChild(clon);
+
+    let questionName = getTopicNameFromUrl(questionsLinks[i]);
+    let questionURL = questionsLinks[i];
+    let questionLink = prevQuestions.querySelectorAll(".question-link")[i];
+    // console.log(questionLink);
+    questionLink.innerHTML = ` ${i +
+      1}. <a href="${questionURL}" target="_blank">${questionName}</a>`;
+  }
+}
+
+function addSubTopic() {
+  subTopicName = $("#sub-topic-name").val();
   updateJsonData("sub-topic", subTopicName);
+  showAllSubtopics(activeTopic);
 }
 
 ///////////////////////////////   String utility functions   ///////////////////////////////////
@@ -169,35 +195,26 @@ function addQuestions() {
     return;
   }
 
+  let activeSubtopic = $(".heading-lg")[index].innerText;
+
   let questionsLinksContainer = $(".questions-links-container")[index]; //corresponds to textbox
   let questionsLinks = questionsLinksContainer.value.split("\n"); //getting each question link from textbox into an array
   if (questionsLinks == "") {
     return;
   }
 
-  let prevQuestions = $(".prev-questions")[index];
-  //div which contains questions already present and new questions can be appended to it
-
-  for (let i = 0; i < questionsLinks.length; i++) {
-    let templateForQuestion = document.getElementById("templateForQuestion");
-    let clon = templateForQuestion.content.cloneNode(true);
-    prevQuestions.appendChild(clon);
-
-    let questionName = getTopicNameFromUrl(questionsLinks[i]);
-    let questionLink = $(".question-link"); //correspond to span in templateForQuestion
-    let questionNum = $(".prev-questions")[index].querySelectorAll(".question")
-      .length;
-
-    questionLink[
-      totalQuestions + i
-    ].innerHTML = ` ${questionNum}. <a href="${questionsLinks[index]}" target="_blank">${questionName}</a>`;
+  for (let i in questionsLinks) {
+    jsonData[activeTopic][activeSubtopic]["All"].push(questionsLinks[i]);
   }
-  questionsLinksContainer.value = "";
+  $("#json-viewer").val(JSON.stringify(jsonData));
+  updateJsonData();
+  showQuestions(activeSubtopic, index);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
-/*function getLinks() {
-  let linksContainer = document.getElementsByClassName("Introduction")[0];
+/*
+function getLinks() {
+  let linksContainer = document.getElementsByTagName("ol")[1];
   let links = linksContainer.getElementsByTagName("a");
   let linksArr = [];
   for (let i = 0; i < links.length; i++) {

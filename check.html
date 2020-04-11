@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Document</title>
+</head>
+
+<body>
+   <button class="add-btn">Btn 1</button>
+   <button class="add-btn">Btn 2</button>
+   <button class="add-btn">Btn 3</button>
+   <button class="add-btn">Btn 4</button>
+
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+   <script>
+      $(".add-btn").click(function () {
+         var index = $(this).index();
+         console.log(index);
+      });
+   </script>
+</body>
+
+</html>
