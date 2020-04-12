@@ -1,4 +1,5 @@
 let activeTopic = "Linked List";
+var jsonData;
 $(document).ready(() => {
   initializeLocalStorage();
 
@@ -8,11 +9,13 @@ $(document).ready(() => {
     setActiveTopic();
     showActiveTopic();
   });
+
+  showActiveTopic();
 });
 
 function initializeLocalStorage() {
   if (localStorage.getItem("myJsonData") == null) {
-    let jsonData = {
+    jsonData = {
       "Linked List": {},
       "Binary Trees": {},
       "Binary Search Trees": {}
@@ -40,6 +43,7 @@ function setActiveTopic() {
 function showActiveTopic() {
   let data = localStorage.getItem("myJsonData");
   jsonData = JSON.parse(data);
+  a = 10;
   for (var topicName in jsonData) {
     if (topicName == activeTopic) {
       showAllSubtopics(topicName);
@@ -86,12 +90,12 @@ function showAllSubtopics(topicName) {
   clearSubTopicsContainer();
   let index = 0;
   for (var subTopicName in jsonData[topicName]) {
-    showSubTopic(subTopicName, index);
+    showSubTopic(topicName, subTopicName, index);
     index++;
   }
 }
 
-function showSubTopic(subTopicName, index) {
+function showSubTopic(topicName, subTopicName, index) {
   let subTopicsContainer = $(".sub-topics-container")[0];
 
   let templateForSubTopic = document.getElementById("templateForSubtopic");
@@ -101,15 +105,31 @@ function showSubTopic(subTopicName, index) {
   let headingLg = $(".heading-lg");
   headingLg[index].innerText = subTopicName;
 
-  showQuestions(subTopicName, index);
+  showQuestionsStatus(topicName, subTopicName);
+  showQuestions(topicName, subTopicName, index);
 }
 
-function showQuestions(subTopic, index) {
+function showQuestionsStatus(topicName, subTopicName) {
+  let doneQuestions = jsonData[topicName][subTopicName]["Done"];
+  let allHeadings = document.querySelectorAll(".heading-lg");
+  let doneContainer;
+  for (let i in allHeadings) {
+    if (subTopicName == allHeadings[i].innerText) {
+      doneContainer = allHeadings[i].parentNode.querySelector(".done");
+      break;
+    }
+  }
+  for (let i in doneQuestions) {
+    doneContainer.innerHTML += doneQuestions[i] + " /";
+  }
+}
+
+function showQuestions(topicName, subTopic, index) {
   let prevQuestions = $(".prev-questions")[index];
   prevQuestions.innerHTML = "";
   //div which contains questions already present and new questions can be appended to it
 
-  let questionsLinks = jsonData[activeTopic][subTopic]["All"];
+  let questionsLinks = jsonData[topicName][subTopic]["All"];
 
   for (let i = 0; i < questionsLinks.length; i++) {
     let templateForQuestion = document.getElementById("templateForQuestion");
@@ -120,8 +140,8 @@ function showQuestions(subTopic, index) {
     let questionURL = questionsLinks[i];
     let questionLink = prevQuestions.querySelectorAll(".question-link")[i];
     // console.log(questionLink);
-    questionLink.innerHTML = ` ${i +
-      1}. <a href="${questionURL}" target="_blank">${questionName}</a>`;
+    questionLink.innerHTML = `<qno>${i +
+      1}</qno>.<a href="${questionURL}" target="_blank">${questionName}</a>`;
   }
 }
 
@@ -164,13 +184,16 @@ function getTopicNameFromUrl(url) {
 
 function toggleQuestionLinkContainer(index) {
   let currTextBox = $(".questions-links-container")[index];
-  let currBtn = $(".add-btn")[index];
-  if (currBtn.innerText == "Add Questions") {
+  let addBtn = $(".add-btn")[index];
+  let cancelBtn = $(".cancel-btn")[index];
+  if (addBtn.innerText == "Add Questions") {
     currTextBox.style.display = "block";
-    currBtn.innerText = "Add";
+    addBtn.innerText = "Add";
+    cancelBtn.style.display = "inline";
   } else {
     currTextBox.style.display = "none";
-    currBtn.innerText = "Add Questions";
+    addBtn.innerText = "Add Questions";
+    cancelBtn.style.display = "none";
   }
 }
 
@@ -210,6 +233,59 @@ function addQuestions() {
   updateJsonData();
   showQuestions(activeSubtopic, index);
 }
+
+function cancelAddingQuestions() {
+  let currBtn = event.target;
+  let index;
+  for (let i = 0; i < $(".cancel-btn").length; i++) {
+    if (currBtn == $(".cancel-btn")[i]) {
+      index = i;
+      break;
+    }
+  }
+  toggleQuestionLinkContainer(index);
+}
+
+function resetRestButtonColors(currBtn) {
+  let parentDIV = event.target.parentNode;
+  parentDIV.querySelectorAll("button").forEach(btn => {
+    if (btn != currBtn) {
+      btn.style.backgroundColor = "wheat";
+    }
+  });
+}
+function markDone() {
+  let btn = event.target;
+  btn.style.backgroundColor = "lightgreen";
+  resetRestButtonColors(btn);
+  let node = btn.parentNode;
+  while (node.querySelectorAll(".heading-lg").length == 0) {
+    node = node.parentNode;
+  }
+  let subTopicName = node.querySelector(".heading-lg").innerText;
+
+  let data = localStorage.getItem("myJsonData");
+  jsonData = JSON.parse(data);
+  let qno = btn.parentNode.parentNode.querySelector("qno").innerText;
+  jsonData[activeTopic][subTopicName]["Done"].push(qno);
+  localStorage.setItem("myJsonData", JSON.stringify(jsonData));
+}
+function markTodo() {
+  let btn = event.target;
+  btn.style.backgroundColor = "skyblue";
+  resetRestButtonColors(btn);
+}
+function markOptional() {
+  let btn = event.target;
+  btn.style.backgroundColor = "rgb(209, 104, 209)";
+  resetRestButtonColors(btn);
+}
+function markDoubt() {
+  let btn = event.target;
+  btn.style.backgroundColor = "rgb(252, 119, 119)";
+  resetRestButtonColors(btn);
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*

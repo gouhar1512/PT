@@ -43,6 +43,7 @@ https://www.geeksforgeeks.org/evaluation-of-expression-tree/
 https://www.geeksforgeeks.org/symmetric-tree-tree-which-is-mirror-image-of-itself/</textarea>
 
             <button onclick="addQuestions()" class="add-btn">Add Questions</button>
+            <button onclick="cancelAddingQuestions()" class="cancel-btn">Cancel</button>
          </div>
       </div>
    </div>
@@ -54,10 +55,11 @@ https://www.geeksforgeeks.org/symmetric-tree-tree-which-is-mirror-image-of-itsel
       </div>
 
       <div class="question-actions">
-         <button>Done</button>
-         <button>To do</button>
-         <button>Optional</button>
-         <button>Doubt</button>
+         <button class="btn-done" onclick="markDone()">Done</button>
+         <button class="btn-todo" onclick="markTodo()">To do</button>
+         <button class="btn-optional" onclick="markOptional()">Optional</button>
+         <button class="btn-doubt" onclick="markDoubt()">Doubt</button>
+
       </div>
    </div>
 </template>

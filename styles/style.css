@@ -4,8 +4,14 @@ body {
 button {
   cursor: pointer;
   background-color: wheat;
+  margin: 2px;
+  border: 1px solid black;
+  padding: 3px 5px;
 }
 
+.cancel-btn {
+  display: none;
+}
 .topics-container {
   background-color: green;
   border: 1px solid black;
