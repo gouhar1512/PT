@@ -15,8 +15,8 @@
       </div>
       <div class="done progress-container"><span class="heading-sm">Done :</span> </div>
       <div class="todo progress-container"><span class="heading-sm">To Do :</span> </div>
-      <div class="optionals progress-container"><span class="heading-sm">Optionals : </span></div>
-      <div class="doubts progress-container"><span class="heading-sm">Doubts</span></div>
+      <div class="optional progress-container"><span class="heading-sm">Optionals : </span></div>
+      <div class="doubt progress-container"><span class="heading-sm">Doubts: </span></div>
       <div class="all-questions">
          <span class="heading-sm">All questions</span>
          <div class="prev-questions">
@@ -55,10 +55,10 @@ https://www.geeksforgeeks.org/symmetric-tree-tree-which-is-mirror-image-of-itsel
       </div>
 
       <div class="question-actions">
-         <button class="btn-done" onclick="markDone()">Done</button>
-         <button class="btn-todo" onclick="markTodo()">To do</button>
-         <button class="btn-optional" onclick="markOptional()">Optional</button>
-         <button class="btn-doubt" onclick="markDoubt()">Doubt</button>
+         <button class="btn-done" name="done" onclick="markQuestion()">Done</button>
+         <button class="btn-todo" name="todo" onclick="markQuestion()">To do</button>
+         <button class="btn-optional" name="optional" onclick="markQuestion()">Optional</button>
+         <button class="btn-doubt" name="doubt" onclick="markQuestion()">Doubt</button>
 
       </div>
    </div>
@@ -80,9 +80,7 @@ https://www.geeksforgeeks.org/symmetric-tree-tree-which-is-mirror-image-of-itsel
          <button onclick="addSubTopic()">Add Sub Topics + </button>
       </div>
    </div>
-   <textarea id="json-viewer" style="width: 500px;height: 100px;">
-
-   </textarea>
+   <textarea id="json-viewer" style="width: 500px;height: 100px;" onclick="viewJson()"></textarea>
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
    <script src="scripts/main.js"></script>
 </body>
