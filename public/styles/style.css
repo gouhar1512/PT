@@ -1,6 +1,7 @@
 body {
   background-color: rgb(158, 170, 206);
 }
+
 button {
   cursor: pointer;
   background-color: wheat;
@@ -24,8 +25,19 @@ button {
 .cancel-btn {
   display: none;
 }
+
+.btn-save {
+  padding: 5px;
+  width: 200px;
+  font-size: 18px;
+  background-color: #337ab7;
+  border: 1px solid rgb(38, 72, 127);
+  color: white;
+  float: right;
+}
+
 .topics-container {
-  background-color: green;
+  background-color: rgb(42, 158, 110);
   border: 1px solid black;
   padding: 10px;
 }
@@ -111,4 +123,14 @@ button {
   background-color: silver;
   width: fit-content;
   padding: 5px;
+}
+
+#json-viewer {
+  display: none;
+}
+
+.form-elements {
+  position: absolute;
+  right: 20px;
+  top: 28px;
 }

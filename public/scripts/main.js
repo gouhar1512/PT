@@ -7,7 +7,6 @@ var jsonData;
 $(document).ready(() => {
   initializeLocalStorage();
   showTopicButtons();
-
   showActiveTopic();
   setButtonsColor();
 });
@@ -84,8 +83,8 @@ function showTopicButtons() {
     topicsContainer.innerHTML += `<button class="topic-btn">${topic}</button>`;
   }
   topicsContainer.innerHTML += `
-  <input placeholder="Add Topic...." class="new-topic-input">
-  <br><button class="btn-remove">Remove this topic</button>
+  <br><input placeholder="Add Topic...." class="new-topic-input">
+  <button class="btn-remove">Remove this topic</button>
   `;
 
   addEventListenerToAll();
@@ -235,20 +234,6 @@ function showQuestions(topicName, subTopic, index) {
   }
 }
 
-function showUncheckedQuestions() {
-  let questions = $(".question")[0];
-  getJsonData();
-  for (let topic in jsonData) {
-    let currTopic = jsonData[topic];
-    for (let subTopic in currTopic) {
-      let currSubTopic = currTopic[subTopic];
-      for (let done in currSubTopic["Done"]) {
-        console.log(currSubTopic["Done"][done]);
-      }
-    }
-  }
-}
-
 function setSpecificButtonsColors(
   allHeadings,
   btnType,
@@ -313,9 +298,16 @@ function setButtonsColor() {
 
 function addSubTopic() {
   subTopicName = $("#sub-topic-name").val();
+
+  getJsonData();
+  if (jsonData[activeTopic][subTopicName] != null) {
+    alert(subTopicName + " in " + activeTopic + " is already present ");
+    return;
+  }
   updateJsonData("sub-topic", subTopicName);
   showAllSubTopics(activeTopic);
   setButtonsColor();
+  $("#sub-topic-name").val("");
 }
 
 function removeSubTopic() {
@@ -334,6 +326,7 @@ function removeSubTopic() {
     delete jsonData[activeTopic][subTopic];
     saveJsonData();
     showAllSubTopics(activeTopic);
+    setButtonsColor();
   }
 }
 
