@@ -364,6 +364,23 @@ function setStatusOfQuestion(status, btnColor) {
   let qno = btn.parentNode.parentNode.querySelector("qno").innerText;
 
   getJsonData();
+  let doneQuestions = jsonData[activeTopic][subTopicName]["Done"];
+  let todoQuestions = jsonData[activeTopic][subTopicName]["Todo"];
+  let optionalQuestions = jsonData[activeTopic][subTopicName]["Optional"];
+  let doubtQuestions = jsonData[activeTopic][subTopicName]["Doubt"];
+  jsonData[activeTopic][subTopicName]["Done"] = doneQuestions.filter(
+    e => e != qno
+  );
+  jsonData[activeTopic][subTopicName]["Todo"] = todoQuestions.filter(
+    e => e != qno
+  );
+  jsonData[activeTopic][subTopicName]["Optional"] = optionalQuestions.filter(
+    e => e != qno
+  );
+  jsonData[activeTopic][subTopicName]["Doubt"] = doubtQuestions.filter(
+    e => e != qno
+  );
+
   jsonData[activeTopic][subTopicName][status].push(qno);
   saveJsonData();
 }
@@ -384,6 +401,8 @@ function markQuestion() {
       setStatusOfQuestion("Doubt", doubtColor);
   }
 }
+
+function maintainUniqueStatusOfQuestion() {}
 
 function viewJson() {
   jsonData = localStorage.getItem("myJsonData");
