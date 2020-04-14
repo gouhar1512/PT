@@ -7,8 +7,20 @@ button {
   margin: 2px;
   border: 1px solid black;
   padding: 3px 5px;
+  user-select: none;
 }
-
+.btn-remove {
+  border-radius: 10px;
+  background-color: rgb(201, 48, 44);
+  padding: 3px 7px;
+  color: white;
+}
+.new-topic-input {
+  border-radius: 10px;
+  border: 1px solid white;
+  padding: 3px 7px;
+  width: 170px;
+}
 .cancel-btn {
   display: none;
 }
@@ -41,12 +53,32 @@ button {
   border: 1px solid black;
   padding: 10px;
 }
-.heading-sm {
-  font-weight: bold;
-}
+
 .heading-lg {
   font-weight: bold;
   font-size: 2rem;
+}
+.heading-sm {
+  font-weight: bold;
+}
+.heading-status {
+  width: 70px;
+  display: inline-block;
+  background-color: black;
+  padding: 1px;
+  margin-right: 5px;
+}
+.heading-done {
+  color: lightgreen;
+}
+.heading-todo {
+  color: skyblue;
+}
+.heading-optional {
+  color: rgb(209, 104, 209);
+}
+.heading-doubt {
+  color: rgb(252, 119, 119);
 }
 
 .prev-questions {

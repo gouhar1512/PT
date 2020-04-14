@@ -6,14 +6,7 @@ let doubtColor = "rgb(252, 119, 119)";
 var jsonData;
 $(document).ready(() => {
   initializeLocalStorage();
-
-  let topicBtns = $(".topic-btn");
-  topicBtns.click(() => {
-    highlightActiveTopicBtn(topicBtns);
-    setActiveTopic();
-    showActiveTopic();
-    setButtonsColor();
-  });
+  showTopicButtons();
 
   showActiveTopic();
   setButtonsColor();
@@ -21,11 +14,7 @@ $(document).ready(() => {
 
 function initializeLocalStorage() {
   if (localStorage.getItem("myJsonData") == null) {
-    jsonData = {
-      "Linked List": {},
-      "Binary Trees": {},
-      "Binary Search Trees": {}
-    };
+    jsonData = {};
     localStorage.setItem("myJsonData", JSON.stringify(jsonData));
   }
 }
@@ -50,6 +39,58 @@ function highlightActiveTopicBtn(topicBtns) {
   }
 }
 
+function addTopic(topicName) {
+  getJsonData();
+  if (jsonData[topicName] != null) {
+    alert(topicName + " is already present!");
+    return;
+  }
+  jsonData[topicName] = {};
+  saveJsonData();
+  showTopicButtons();
+}
+
+function addEventListenerToAll() {
+  let topicBtns = $(".topic-btn");
+  topicBtns.click(() => {
+    highlightActiveTopicBtn(topicBtns);
+    setActiveTopic();
+    showActiveTopic();
+    setButtonsColor();
+  });
+
+  let newTopicInput = $(".new-topic-input");
+  newTopicInput.keydown(e => {
+    if (e.keyCode == 13) {
+      addTopic(newTopicInput.val());
+    }
+  });
+
+  $(".btn-remove").click(() => {
+    if (confirm("Do you want to remove " + activeTopic)) {
+      getJsonData();
+      delete jsonData[activeTopic];
+      saveJsonData();
+      showTopicButtons();
+    }
+  });
+}
+
+function showTopicButtons() {
+  getJsonData();
+  let topicsContainer = $(".topics-container")[0];
+  topicsContainer.innerHTML = "";
+  for (let topic in jsonData) {
+    topicsContainer.innerHTML += `<button class="topic-btn">${topic}</button>`;
+  }
+  topicsContainer.innerHTML += `
+  <input placeholder="Add Topic...." class="new-topic-input">
+  <br><button class="btn-remove">Remove this topic</button>
+  `;
+
+  addEventListenerToAll();
+}
+
 function setActiveTopic() {
   let currBtn = event.target;
   activeTopic = currBtn.innerText;
@@ -61,7 +102,7 @@ function showActiveTopic() {
   a = 10;
   for (var topicName in jsonData) {
     if (topicName == activeTopic) {
-      showAllSubtopics(topicName);
+      showAllSubTopics(topicName);
     }
   }
 }
@@ -101,7 +142,7 @@ function clearSubTopicsContainer() {
   subTopicsContainer.innerHTML = "";
 }
 
-function showAllSubtopics(topicName) {
+function showAllSubTopics(topicName) {
   clearSubTopicsContainer();
   let index = 0;
   for (var subTopicName in jsonData[topicName]) {
@@ -142,6 +183,19 @@ function showQuestionsStatus(topicName, subTopicName) {
       break;
     }
   }
+  doneContainer.innerHTML =
+    "<span class='heading-done heading-status'>Done : </span>";
+  todoContainer.innerHTML =
+    "<span class='heading-todo heading-status'>Todo : </span>";
+  optionalContainer.innerHTML =
+    "<span class='heading-optional heading-status'>Optional : </span>";
+  doubtContainer.innerHTML =
+    "<span class='heading-doubt heading-status'>Doubt : </span>";
+
+  doneQuestions.sort();
+  todoQuestions.sort();
+  optionalQuestions.sort();
+  doubtQuestions.sort();
   for (let i in doneQuestions) {
     doneContainer.innerHTML =
       doneContainer.innerHTML + doneQuestions[i] + " / ";
@@ -244,18 +298,33 @@ function setButtonsColor() {
 function addSubTopic() {
   subTopicName = $("#sub-topic-name").val();
   updateJsonData("sub-topic", subTopicName);
-  showAllSubtopics(activeTopic);
+  showAllSubTopics(activeTopic);
 }
 
-///////////////////////////////   String utility functions   ///////////////////////////////////
+function removeSubTopic() {
+  let node = $(event.target);
+  let subTopic;
+  while (true) {
+    if (node.find(".heading-lg").length == 0) {
+      node = node.parent();
+    } else {
+      subTopic = node.find(".heading-lg")[0].innerText;
+      break;
+    }
+  }
+  if (confirm("Do you want to delete '" + subTopic + "' in " + activeTopic)) {
+    getJsonData();
+    delete jsonData[activeTopic][subTopic];
+    saveJsonData();
+    showAllSubTopics(activeTopic);
+  }
+}
 
 function toTitleCase(str) {
   return str.replace(/(?:^|\s)\w/g, function(match) {
     return match.toUpperCase();
   });
 }
-
-////////////////////////////////////////////////////////////////////////////////////////////////
 
 function getTopicNameFromUrl(url) {
   let lastIndex = url.length - 1;
@@ -314,7 +383,7 @@ function addQuestions() {
     return;
   }
 
-  let activeSubtopic = $(".heading-lg")[index].innerText;
+  let subTopic = $(".heading-lg")[index].innerText;
 
   let questionsLinksContainer = $(".questions-links-container")[index]; //corresponds to textbox
   let questionsLinks = questionsLinksContainer.value.split("\n"); //getting each question link from textbox into an array
@@ -323,11 +392,11 @@ function addQuestions() {
   }
 
   for (let i in questionsLinks) {
-    jsonData[activeTopic][activeSubtopic]["All"].push(questionsLinks[i]);
+    jsonData[activeTopic][subTopic]["All"].push(questionsLinks[i]);
   }
   $("#json-viewer").val(JSON.stringify(jsonData));
   updateJsonData();
-  // showQuestions(activeSubtopic, index);
+  showQuestions(activeTopic, subTopic, index);
 }
 
 function cancelAddingQuestions() {
@@ -367,6 +436,7 @@ function setStatusOfQuestion(status, btnColor) {
   maintainUniqueStatusOfQuestion(subTopicName, qno);
   jsonData[activeTopic][subTopicName][status].push(qno);
   saveJsonData();
+  showQuestionsStatus(activeTopic, subTopicName);
 }
 
 function markQuestion() {

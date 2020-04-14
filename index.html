@@ -13,10 +13,10 @@
       <div class="heading-lg">
 
       </div>
-      <div class="done progress-container"><span class="heading-sm">Done :</span> </div>
-      <div class="todo progress-container"><span class="heading-sm">To Do :</span> </div>
-      <div class="optional progress-container"><span class="heading-sm">Optionals : </span></div>
-      <div class="doubt progress-container"><span class="heading-sm">Doubts: </span></div>
+      <div class="done progress-container"></div>
+      <div class="todo progress-container"></div>
+      <div class="optional progress-container"></div>
+      <div class="doubt progress-container"></div>
       <div class="all-questions">
          <span class="heading-sm">All questions</span>
          <div class="prev-questions">
@@ -44,6 +44,7 @@ https://www.geeksforgeeks.org/symmetric-tree-tree-which-is-mirror-image-of-itsel
 
             <button onclick="addQuestions()" class="add-btn">Add Questions</button>
             <button onclick="cancelAddingQuestions()" class="cancel-btn">Cancel</button>
+            <button onclick="removeSubTopic()" class="btn-remove">Remove SubTopic</button>
          </div>
       </div>
    </div>
@@ -66,9 +67,7 @@ https://www.geeksforgeeks.org/symmetric-tree-tree-which-is-mirror-image-of-itsel
 
 <body>
    <div class="topics-container">
-      <button class="topic-btn">Linked List</button>
-      <button class="topic-btn">Binary Trees</button>
-      <button class="topic-btn">Binary Search Trees</button>
+
    </div>
    <div class="status-container">
       <div class="sub-topics-container">
