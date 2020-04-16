@@ -29,7 +29,8 @@ function saveJsonData() {
   localStorage.setItem("myJsonData", JSON.stringify(jsonData));
 }
 
-function highlightActiveTopicBtn(topicBtns) {
+function highlightActiveTopicBtn() {
+  let topicBtns = $(".topic-btn");
   let currBtn = event.target;
   for (let i = 0; i < topicBtns.length; i++) {
     if (currBtn == topicBtns[i]) {
@@ -40,48 +41,28 @@ function highlightActiveTopicBtn(topicBtns) {
   }
 }
 
-function addTopic(topicName) {
-  getJsonData();
-  if (jsonData[topicName] != null) {
-    alert(topicName + " is already present!");
-    return;
+function addTopic() {
+  let newTopicInput = $(".new-topic-input");
+  let topicName = newTopicInput.val();
+  if (event.keyCode == 13) {
+    getJsonData();
+    if (jsonData[topicName] != null) {
+      alert(topicName + " is already present!");
+      return;
+    }
+    jsonData[topicName] = {};
+    saveJsonData();
+    showTopicButtons();
   }
-  jsonData[topicName] = {};
-  saveJsonData();
-  showTopicButtons();
 }
 
-function addEventListenerToAll() {
-  let topicBtns = $(".topic-btn");
-  topicBtns.click(() => {
-    highlightActiveTopicBtn(topicBtns);
-    setActiveTopic();
-    showActiveTopic();
-    setButtonsColor();
-  });
-
-  let newTopicInput = $(".new-topic-input");
-  newTopicInput.keydown(e => {
-    if (e.keyCode == 13) {
-      addTopic(newTopicInput.val());
-    }
-  });
-
-  $(".btn-remove").click(() => {
-    if (confirm("Do you want to remove " + activeTopic)) {
-      getJsonData();
-      delete jsonData[activeTopic];
-      saveJsonData();
-      showTopicButtons();
-    }
-  });
-
-  let inputRemarks = $(".input-remarks");
-  inputRemarks.keydown(e => {
-    if (e.keyCode == 13) {
-      addRemarks(event.target.value);
-    }
-  });
+function removeTopic() {
+  if (confirm("Do you want to remove " + activeTopic)) {
+    getJsonData();
+    delete jsonData[activeTopic];
+    saveJsonData();
+    showTopicButtons();
+  }
 }
 
 function showTopicButtons() {
@@ -90,17 +71,24 @@ function showTopicButtons() {
   topicsContainer.innerHTML = "";
 
   for (let topic in jsonData) {
-    topicsContainer.innerHTML += `<button class="topic-btn">${topic}</button>`;
+    topicsContainer.innerHTML += `<button class="topic-btn" onclick="initializeActiveTopic()">${topic}</button>`;
   }
   topicsContainer.innerHTML += `
-  <br><input placeholder="Add Topic...." class="new-topic-input">
-  <button class="btn-remove">Remove this topic</button>
+  <br><input placeholder="Add Topic...." class="new-topic-input" onkeydown="addTopic()">
+  <button class="btn-remove-topic" onclick="removeTopic()">Remove current topic</button>
   `;
 }
 
 function setActiveTopic() {
   let currBtn = event.target;
   activeTopic = currBtn.innerText;
+}
+
+function initializeActiveTopic() {
+  highlightActiveTopicBtn();
+  setActiveTopic();
+  showActiveTopic();
+  setButtonsColor();
 }
 
 function showActiveTopic() {
@@ -111,8 +99,6 @@ function showActiveTopic() {
       showAllSubTopics(topicName);
     }
   }
-
-  addEventListenerToAll();
 }
 
 function updateJsonData(type, key) {
@@ -129,7 +115,8 @@ function updateJsonData(type, key) {
     Todo: [],
     Optional: [],
     Doubt: [],
-    Important: []
+    Important: [],
+    Remarks: {}
   };
 
   switch (type) {
@@ -387,27 +374,26 @@ function removeSubTopic() {
   }
 }
 
-function addRemarks(remark) {
+function addRemarks() {
   let inputRemarks = event.target;
+  let remark = inputRemarks.value;
   let node = inputRemarks.parentNode;
   while (node.querySelectorAll(".heading-lg").length == 0) {
     node = node.parentNode;
   }
   let subTopicName = node.querySelector(".heading-lg").innerText;
-
   node = inputRemarks.parentNode;
   while (node.querySelectorAll(".question-link").length == 0) {
     node = node.parentNode;
   }
   let qno = node.querySelector("qno").innerText;
-  getJsonData();
   jsonData[activeTopic][subTopicName]["Remarks"][qno] = remark;
   saveJsonData();
   showQuestionsStatus(activeTopic, subTopicName);
-  inputRemarks.style.backgroundColor = "skyblue";
+  inputRemarks.style.backgroundColor = "rgba(190, 229, 245, 0.3)";
   setTimeout(() => {
     inputRemarks.style.backgroundColor = "silver";
-  }, 300);
+  }, 500);
 }
 
 function toTitleCase(str) {

@@ -46,7 +46,7 @@ https://www.geeksforgeeks.org/symmetric-tree-tree-which-is-mirror-image-of-itsel
 
             <button onclick="addQuestions()" class="add-btn">Add Questions</button>
             <button onclick="cancelAddingQuestions()" class="cancel-btn">Cancel</button>
-            <button onclick="removeSubTopic()" class="btn-remove">Remove SubTopic</button>
+            <button onclick="removeSubTopic()" class="btn-remove-subtopic">Remove SubTopic</button>
          </div>
       </div>
    </div>
@@ -63,7 +63,7 @@ https://www.geeksforgeeks.org/symmetric-tree-tree-which-is-mirror-image-of-itsel
          <button class="btn-optional" name="optional" onclick="markQuestion()">Optional</button>
          <button class="btn-doubt" name="doubt" onclick="markQuestion()">Doubt</button>
          <button class="btn-imp" name="important" onclick="addToImportant()">&#9734</button>
-         <input class="input-remarks">
+         <input class="input-remarks" onkeydown="addRemarks()">
 
       </div>
    </div>
