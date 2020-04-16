@@ -18,6 +18,7 @@
       <div class="todo progress-container"></div>
       <div class="optional progress-container"></div>
       <div class="doubt progress-container"></div>
+      <div class="important progress-container"></div>
       <div class="all-questions">
          <span class="heading-sm">All questions</span>
          <div class="prev-questions">
@@ -61,13 +62,15 @@ https://www.geeksforgeeks.org/symmetric-tree-tree-which-is-mirror-image-of-itsel
          <button class="btn-todo" name="todo" onclick="markQuestion()">To do</button>
          <button class="btn-optional" name="optional" onclick="markQuestion()">Optional</button>
          <button class="btn-doubt" name="doubt" onclick="markQuestion()">Doubt</button>
+         <button class="btn-imp" name="important" onclick="addToImportant()">&#9734</button>
+         <input class="input-remarks">
 
       </div>
    </div>
 </template>
 
 <body>
-   <div class="topics-container">
+   <div class=" topics-container">
    </div>
    <div class="form-elements">
       <form method="post">

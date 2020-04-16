@@ -3,6 +3,7 @@ let doneColor = "lightgreen";
 let todoColor = "skyblue";
 let optionalColor = "rgb(209, 104, 209)";
 let doubtColor = "rgb(252, 119, 119)";
+let impColor = "yellow";
 var jsonData;
 $(document).ready(() => {
   initializeLocalStorage();
@@ -73,6 +74,13 @@ function addEventListenerToAll() {
       showTopicButtons();
     }
   });
+
+  let inputRemarks = $(".input-remarks");
+  inputRemarks.keydown(e => {
+    if (e.keyCode == 13) {
+      addRemarks(event.target.value);
+    }
+  });
 }
 
 function showTopicButtons() {
@@ -86,8 +94,6 @@ function showTopicButtons() {
   <br><input placeholder="Add Topic...." class="new-topic-input">
   <button class="btn-remove">Remove this topic</button>
   `;
-
-  addEventListenerToAll();
 }
 
 function setActiveTopic() {
@@ -98,12 +104,13 @@ function setActiveTopic() {
 function showActiveTopic() {
   let data = localStorage.getItem("myJsonData");
   jsonData = JSON.parse(data);
-  a = 10;
   for (var topicName in jsonData) {
     if (topicName == activeTopic) {
       showAllSubTopics(topicName);
     }
   }
+
+  addEventListenerToAll();
 }
 
 function updateJsonData(type, key) {
@@ -119,7 +126,8 @@ function updateJsonData(type, key) {
     Done: [],
     Todo: [],
     Optional: [],
-    Doubt: []
+    Doubt: [],
+    Important: []
   };
 
   switch (type) {
@@ -134,8 +142,6 @@ function updateJsonData(type, key) {
   localStorage.setItem("myJsonData", JSON.stringify(jsonData));
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////
-
 function clearSubTopicsContainer() {
   let subTopicsContainer = $(".sub-topics-container")[0];
   subTopicsContainer.innerHTML = "";
@@ -148,6 +154,7 @@ function showAllSubTopics(topicName) {
     showSubTopic(topicName, subTopicName, index);
     index++;
   }
+  showRemarks();
 }
 
 function showSubTopic(topicName, subTopicName, index) {
@@ -165,20 +172,30 @@ function showSubTopic(topicName, subTopicName, index) {
 }
 
 function showQuestionsStatus(topicName, subTopicName) {
-  let doneQuestions, todoQuestions, optionalQuestions, doubtQuestions;
+  let doneQuestions,
+    todoQuestions,
+    optionalQuestions,
+    doubtQuestions,
+    impQuestions;
   doneQuestions = jsonData[topicName][subTopicName]["Done"];
   todoQuestions = jsonData[topicName][subTopicName]["Todo"];
   optionalQuestions = jsonData[topicName][subTopicName]["Optional"];
   doubtQuestions = jsonData[topicName][subTopicName]["Doubt"];
+  impQuestions = jsonData[topicName][subTopicName]["Important"];
 
   let allHeadings = document.querySelectorAll(".heading-lg");
-  let doneContainer, todoContainer, optionalContainer, doubtContainer;
+  let doneContainer,
+    todoContainer,
+    optionalContainer,
+    doubtContainer,
+    impContainer;
   for (let i in allHeadings) {
     if (subTopicName == allHeadings[i].innerText) {
       doneContainer = allHeadings[i].parentNode.querySelector(".done");
       todoContainer = allHeadings[i].parentNode.querySelector(".todo");
       optionalContainer = allHeadings[i].parentNode.querySelector(".optional");
       doubtContainer = allHeadings[i].parentNode.querySelector(".doubt");
+      impContainer = allHeadings[i].parentNode.querySelector(".important");
       break;
     }
   }
@@ -190,6 +207,8 @@ function showQuestionsStatus(topicName, subTopicName) {
     "<span class='heading-optional heading-status'>Optional : </span>";
   doubtContainer.innerHTML =
     "<span class='heading-doubt heading-status'>Doubt : </span>";
+  impContainer.innerHTML =
+    "<span class='heading-imp heading-status'>Important : </span>";
 
   doneQuestions.sort();
   todoQuestions.sort();
@@ -211,6 +230,9 @@ function showQuestionsStatus(topicName, subTopicName) {
     doubtContainer.innerHTML =
       doubtContainer.innerHTML + doubtQuestions[i] + " / ";
   }
+  for (let i in impQuestions) {
+    impContainer.innerHTML = impContainer.innerHTML + impQuestions[i] + " / ";
+  }
 }
 
 function showQuestions(topicName, subTopic, index) {
@@ -228,9 +250,29 @@ function showQuestions(topicName, subTopic, index) {
     let questionName = getTopicNameFromUrl(questionsLinks[i]);
     let questionURL = questionsLinks[i];
     let questionLink = prevQuestions.querySelectorAll(".question-link")[i];
-    // console.log(questionLink);
     questionLink.innerHTML = `<qno>${i +
       1}</qno>.<a href="${questionURL}" target="_blank">${questionName}</a>`;
+  }
+}
+
+function showRemarks() {
+  getJsonData();
+  let allHeadings = document.querySelectorAll(".heading-lg");
+
+  for (topic in jsonData) {
+    for (subTopic in jsonData[topic]) {
+      for (let i = 0; i < allHeadings.length; i++) {
+        if (allHeadings[i].innerText == subTopic) {
+          let inputRemarks = allHeadings[i].parentNode.querySelectorAll(
+            ".input-remarks"
+          );
+          let remark = jsonData[topic][subTopic]["Remarks"];
+          for (let i in remark) {
+            inputRemarks[i - 1].value = remark[i];
+          }
+        }
+      }
+    }
   }
 }
 
@@ -290,6 +332,14 @@ function setButtonsColor() {
           doubtColor
         );
 
+        setSpecificButtonsColors(
+          allHeadings[i],
+          ".btn-imp",
+          subTopic,
+          "Fav",
+          impColor
+        );
+
         break;
       }
     }
@@ -330,6 +380,25 @@ function removeSubTopic() {
   }
 }
 
+function addRemarks(remark) {
+  let inputRemarks = event.target;
+  let node = inputRemarks.parentNode;
+  while (node.querySelectorAll(".heading-lg").length == 0) {
+    node = node.parentNode;
+  }
+  let subTopicName = node.querySelector(".heading-lg").innerText;
+
+  node = inputRemarks.parentNode;
+  while (node.querySelectorAll(".question-link").length == 0) {
+    node = node.parentNode;
+  }
+  let qno = node.querySelector("qno").innerText;
+  getJsonData();
+  jsonData[activeTopic][subTopicName]["Remarks"][qno] = remark;
+  saveJsonData();
+  showQuestionsStatus(activeTopic, subTopicName);
+}
+
 function toTitleCase(str) {
   return str.replace(/(?:^|\s)\w/g, function(match) {
     return match.toUpperCase();
@@ -355,8 +424,6 @@ function getTopicNameFromUrl(url) {
   return topicName;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////
-
 function toggleQuestionLinkContainer(index) {
   let currTextBox = $(".questions-links-container")[index];
   let addBtn = $(".add-btn")[index];
@@ -371,8 +438,6 @@ function toggleQuestionLinkContainer(index) {
     cancelBtn.style.display = "none";
   }
 }
-
-////////////////////////////////////////////////////////////////////////////////////////////////
 
 function addQuestions() {
   let currBtn = event.target;
@@ -466,6 +531,20 @@ function markQuestion() {
   }
 }
 
+function addToImportant() {
+  let btn = event.target;
+  let node = btn.parentNode;
+  while (node.querySelectorAll(".heading-lg").length == 0) {
+    node = node.parentNode;
+  }
+  let subTopicName = node.querySelector(".heading-lg").innerText;
+  let qno = btn.parentNode.parentNode.querySelector("qno").innerText;
+  getJsonData();
+  jsonData[activeTopic][subTopicName]["Important"].push(qno);
+  saveJsonData();
+  showQuestionsStatus(activeTopic, subTopicName);
+}
+
 function maintainUniqueStatusOfQuestion(subTopicName, qno) {
   let doneQuestions = jsonData[activeTopic][subTopicName]["Done"];
   let todoQuestions = jsonData[activeTopic][subTopicName]["Todo"];
@@ -489,6 +568,7 @@ function viewJson() {
   jsonData = localStorage.getItem("myJsonData");
   $("#json-viewer").val(jsonData);
 }
+
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*

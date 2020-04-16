@@ -35,7 +35,16 @@ button {
   color: white;
   float: right;
 }
+.btn-imp {
+  font-size: 15px;
+  padding: 0px 5px;
+}
 
+.input-remarks {
+  width: 300px;
+  border: 1px solid gray;
+  background-color: silver;
+}
 .topics-container {
   background-color: rgb(42, 158, 110);
   border: 1px solid black;
@@ -74,7 +83,7 @@ button {
   font-weight: bold;
 }
 .heading-status {
-  width: 70px;
+  width: 75px;
   display: inline-block;
   background-color: black;
   padding: 1px;
@@ -91,6 +100,9 @@ button {
 }
 .heading-doubt {
   color: rgb(252, 119, 119);
+}
+.heading-imp {
+  color: yellow;
 }
 
 .prev-questions {
@@ -126,7 +138,7 @@ button {
 }
 
 #json-viewer {
-  display: none;
+  /* display: none; */
 }
 
 .form-elements {
