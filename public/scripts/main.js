@@ -88,13 +88,14 @@ function showTopicButtons() {
   getJsonData();
   let topicsContainer = $(".topics-container")[0];
   topicsContainer.innerHTML = "";
+
   for (let topic in jsonData) {
     topicsContainer.innerHTML += `<button class="topic-btn">${topic}</button>`;
   }
-  topicsContainer.innerHTML += `
+  /*topicsContainer.innerHTML += `
   <br><input placeholder="Add Topic...." class="new-topic-input">
   <button class="btn-remove">Remove this topic</button>
-  `;
+  `;*/
 }
 
 function setActiveTopic() {
@@ -590,6 +591,11 @@ function maintainUniqueStatusOfQuestion(subTopicName, qno) {
 function viewJson() {
   jsonData = localStorage.getItem("myJsonData");
   $("#json-viewer").val(jsonData);
+}
+
+function saveJsonFromLocal() {
+  let data = $("#json-from-local").val();
+  localStorage.setItem("myJsonData", data);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////

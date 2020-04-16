@@ -138,11 +138,21 @@ button {
 }
 
 #json-viewer {
-  /* display: none; */
+  display: none;
 }
 
 .form-elements {
   position: absolute;
   right: 20px;
   top: 28px;
+}
+
+.json-local {
+  border: 1px solid black;
+  display: none;
+}
+
+#json-from-local {
+  width: 400px;
+  height: 100px;
 }
