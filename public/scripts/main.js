@@ -4,6 +4,7 @@ let todoColor = "skyblue";
 let optionalColor = "rgb(209, 104, 209)";
 let doubtColor = "rgb(252, 119, 119)";
 let impColor = "yellow";
+let colorPrimary = "wheat";
 var jsonData;
 $(document).ready(() => {
   initializeLocalStorage();
@@ -210,10 +211,15 @@ function showQuestionsStatus(topicName, subTopicName) {
   impContainer.innerHTML =
     "<span class='heading-imp heading-status'>Important : </span>";
 
-  doneQuestions.sort();
-  todoQuestions.sort();
-  optionalQuestions.sort();
-  doubtQuestions.sort();
+  function comparator(a, b) {
+    return parseInt(a) - parseInt(b);
+  }
+  doneQuestions.sort(comparator);
+  todoQuestions.sort(comparator);
+  optionalQuestions.sort(comparator);
+  doubtQuestions.sort(comparator);
+  impQuestions.sort(comparator);
+
   for (let i in doneQuestions) {
     doneContainer.innerHTML =
       doneContainer.innerHTML + doneQuestions[i] + " / ";
@@ -336,7 +342,7 @@ function setButtonsColor() {
           allHeadings[i],
           ".btn-imp",
           subTopic,
-          "Fav",
+          "Important",
           impColor
         );
 
@@ -397,6 +403,10 @@ function addRemarks(remark) {
   jsonData[activeTopic][subTopicName]["Remarks"][qno] = remark;
   saveJsonData();
   showQuestionsStatus(activeTopic, subTopicName);
+  inputRemarks.style.backgroundColor = "skyblue";
+  setTimeout(() => {
+    inputRemarks.style.backgroundColor = "silver";
+  }, 300);
 }
 
 function toTitleCase(str) {
@@ -533,6 +543,7 @@ function markQuestion() {
 
 function addToImportant() {
   let btn = event.target;
+  btn.style.backgroundColor = impColor;
   let node = btn.parentNode;
   while (node.querySelectorAll(".heading-lg").length == 0) {
     node = node.parentNode;
@@ -540,7 +551,19 @@ function addToImportant() {
   let subTopicName = node.querySelector(".heading-lg").innerText;
   let qno = btn.parentNode.parentNode.querySelector("qno").innerText;
   getJsonData();
-  jsonData[activeTopic][subTopicName]["Important"].push(qno);
+  let importantQuestions = jsonData[activeTopic][subTopicName]["Important"];
+
+  jsonData[activeTopic][subTopicName]["Important"] = importantQuestions.filter(
+    e => e != qno
+  );
+
+  let indexOfQues = importantQuestions.indexOf(qno);
+  if (indexOfQues > -1) {
+    btn.style.backgroundColor = colorPrimary;
+    importantQuestions.splice(indexOfQues, 1);
+  } else {
+    jsonData[activeTopic][subTopicName]["Important"].push(qno);
+  }
   saveJsonData();
   showQuestionsStatus(activeTopic, subTopicName);
 }
