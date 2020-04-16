@@ -92,10 +92,10 @@ function showTopicButtons() {
   for (let topic in jsonData) {
     topicsContainer.innerHTML += `<button class="topic-btn">${topic}</button>`;
   }
-  /*topicsContainer.innerHTML += `
+  topicsContainer.innerHTML += `
   <br><input placeholder="Add Topic...." class="new-topic-input">
   <button class="btn-remove">Remove this topic</button>
-  `;*/
+  `;
 }
 
 function setActiveTopic() {
@@ -295,7 +295,7 @@ function setSpecificButtonsColors(
   let questions = jsonData[activeTopic][subTopic][status];
   for (let j in questions) {
     btns[questions[j] - 1].style.backgroundColor = btnColor;
-    questionLink[questions[j] - 1].style.backgroundColor = "silver";
+    questionLink[questions[j] - 1].classList.add("question-viewed");
   }
 }
 function setButtonsColor() {

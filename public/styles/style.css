@@ -136,6 +136,9 @@ button {
   width: fit-content;
   padding: 5px;
 }
+.question-viewed {
+  background-color: silver;
+}
 
 #json-viewer {
   display: none;
