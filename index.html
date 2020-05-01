@@ -25,24 +25,7 @@
 
          </div>
          <div class="new-questions">
-            <textarea class="questions-links-container">
-https://www.geeksforgeeks.org/binary-tree-set-1-introduction/
-https://www.geeksforgeeks.org/binary-tree-set-2-properties/
-https://www.geeksforgeeks.org/binary-tree-set-3-types-of-binary-tree/
-https://www.geeksforgeeks.org/handshaking-lemma-and-interesting-tree-properties/
-https://www.geeksforgeeks.org/enumeration-of-binary-trees/
-https://www.geeksforgeeks.org/insertion-binary-tree/
-https://www.geeksforgeeks.org/deletion-binary-tree/
-https://www.geeksforgeeks.org/bfs-vs-dfs-binary-tree/
-https://www.geeksforgeeks.org/binary-tree-array-implementation/
-https://www.geeksforgeeks.org/avl-with-duplicate-keys/
-https://www.geeksforgeeks.org/applications-of-tree-data-structure/
-https://www.geeksforgeeks.org/applications-of-minimum-spanning-tree/
-https://www.geeksforgeeks.org/continuous-tree/
-https://www.geeksforgeeks.org/foldable-binary-trees/
-https://www.geeksforgeeks.org/expression-tree/
-https://www.geeksforgeeks.org/evaluation-of-expression-tree/
-https://www.geeksforgeeks.org/symmetric-tree-tree-which-is-mirror-image-of-itself/</textarea>
+            <textarea class="questions-links-container"></textarea>
 
             <button onclick="addQuestions()" class="add-btn">Add Questions</button>
             <button onclick="cancelAddingQuestions()" class="cancel-btn">Cancel</button>
@@ -63,15 +46,21 @@ https://www.geeksforgeeks.org/symmetric-tree-tree-which-is-mirror-image-of-itsel
          <button class="btn-optional" name="optional" onclick="markQuestion()">Optional</button>
          <button class="btn-doubt" name="doubt" onclick="markQuestion()">Doubt</button>
          <button class="btn-imp" name="important" onclick="addToImportant()">&#9734</button>
-         <input class="input-remarks" onkeydown="addRemarks()">
+         <input class="input-remarks" onkeydown="addRemarks()" onclick="popUpRemarks()">
 
       </div>
    </div>
 </template>
 
+
 <body>
-   <div class=" topics-container">
+
+   <div class="topics-container">
    </div>
+   <div class="remarks-container">
+
+   </div>
+
    <div class="form-elements">
       <form method="post">
          <textarea name="data" id="json-viewer" style="width: 500px;height: 100px;" onclick="viewJson()"></textarea>
@@ -85,7 +74,7 @@ https://www.geeksforgeeks.org/symmetric-tree-tree-which-is-mirror-image-of-itsel
       </div>
 
       <div>
-         <input id="sub-topic-name" placeholder="Enter sub-topic" value="single">
+         <input id="sub-topic-name" placeholder="Enter sub-topic">
          <button onclick="addSubTopic()">Add Sub Topics + </button>
       </div>
    </div>

@@ -150,7 +150,15 @@ button {
   right: 20px;
   top: 28px;
 }
-
+.remarks-container {
+  position: absolute;
+  left: 35%;
+  top: 10px;
+  width: 400px;
+  height: 70px;
+  color: black;
+  font-size: 18px;
+}
 .json-local {
   border: 1px solid black;
   display: none;

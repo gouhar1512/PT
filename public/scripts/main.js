@@ -270,6 +270,13 @@ function showRemarks() {
   }
 }
 
+function popUpRemarks() {
+  let input = $(event.target);
+  let remarks = input.val();
+  let remarksContainer = $(".remarks-container");
+  remarksContainer[0].innerText = remarks;
+}
+
 function setSpecificButtonsColors(
   allHeadings,
   btnType,
