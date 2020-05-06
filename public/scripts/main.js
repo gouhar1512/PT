@@ -535,6 +535,20 @@ function markQuestion() {
   }
 }
 
+function getSubTopicAndQno() {
+  //get subtopic and question number by traversing DOM
+  let e = event.target;
+  let node = e.parentNode;
+  while (node.querySelectorAll(".heading-lg").length == 0) {
+    node = node.parentNode;
+  }
+  let subTopicName = node.querySelector(".heading-lg").innerText;
+  let qno = e.parentNode.parentNode.querySelector("qno").innerText;
+  return {
+    subTopic: subTopicName,
+    qno: qno
+  };
+}
 function addToImportant() {
   let btn = event.target;
   btn.style.backgroundColor = impColor;

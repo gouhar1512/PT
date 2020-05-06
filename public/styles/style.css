@@ -107,7 +107,7 @@ button {
 
 .prev-questions {
   border: 1px solid black;
-  height: 200px;
+  height: 300px;
   overflow: auto;
 }
 
@@ -167,4 +167,21 @@ button {
 #json-from-local {
   width: 400px;
   height: 100px;
+}
+
+#codeBox {
+  border: 1px solid black;
+  width: 50%;
+  height: 400px;
+  position: absolute;
+  left: 25%;
+  background-color: rgba(0, 0, 0, 0.8);
+  font-family: Georgia, "Times New Roman", Times, serif;
+  padding: 5px;
+  display: none;
+}
+#code {
+  color: white;
+  width: 100%;
+  height: 95%;
 }
