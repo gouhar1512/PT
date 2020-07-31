@@ -11,25 +11,27 @@
 
 <template id="templateForSubtopic">
    <div class="sub-topic">
-      <div class="heading-lg">
+      <div class="heading-lg" onclick="toggleSubTopic()">
 
       </div>
-      <div class="done progress-container"></div>
-      <div class="todo progress-container"></div>
-      <div class="optional progress-container"></div>
-      <div class="doubt progress-container"></div>
-      <div class="important progress-container"></div>
-      <div class="all-questions">
-         <span class="heading-sm">All questions</span>
-         <div class="prev-questions">
+      <div class="toggleClass">
+         <div class="done progress-container"></div>
+         <div class="todo progress-container"></div>
+         <div class="optional progress-container"></div>
+         <div class="doubt progress-container"></div>
+         <div class="important progress-container"></div>
+         <div class="all-questions">
+            <span class="heading-sm">All questions</span>
+            <div class="prev-questions">
 
-         </div>
-         <div class="new-questions">
-            <textarea class="questions-links-container"></textarea>
+            </div>
+            <div class="new-questions">
+               <textarea class="questions-links-container"></textarea>
 
-            <button onclick="addQuestions()" class="add-btn">Add Questions</button>
-            <button onclick="cancelAddingQuestions()" class="cancel-btn">Cancel</button>
-            <button onclick="removeSubTopic()" class="btn-remove-subtopic">Remove SubTopic</button>
+               <button onclick="addQuestions()" class="add-btn">Add Questions</button>
+               <button onclick="cancelAddingQuestions()" class="cancel-btn">Cancel</button>
+               <button onclick="removeSubTopic()" class="btn-remove-subtopic">Remove SubTopic</button>
+            </div>
          </div>
       </div>
    </div>
@@ -61,10 +63,13 @@
    </div>
 
    <div class="form-elements">
-      <form method="post">
+
+      <button id="btn-view-json">View Json</button>
+      <div>
          <textarea name="data" id="json-viewer" style="width: 500px;height: 100px;" onclick="viewJson()"></textarea>
-         <input onclick="viewJson()" type="submit" value="Save" class="btn-save">
-      </form>
+
+         <input onclick="saveText()" type="button" value="Save" class="btn-save">
+      </div>
    </div>
 
    <div class="status-container">

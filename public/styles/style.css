@@ -26,15 +26,18 @@ button {
   display: none;
 }
 
-.btn-save {
+.btn-save,
+#btn-view-json {
   padding: 5px;
-  width: 200px;
+  width: 120px;
   font-size: 18px;
-  background-color: #337ab7;
-  border: 1px solid rgb(38, 72, 127);
+  background-color: dodgerblue;
+  border: 1px solid black;
   color: white;
   float: right;
+  cursor: pointer;
 }
+
 .btn-imp {
   font-size: 15px;
   padding: 0px 5px;
@@ -57,11 +60,12 @@ button {
 }
 
 .sub-topics-container {
-  border: 2px solid brown;
+  border: 2px solid rgb(4, 126, 126);
 }
 
 .sub-topic {
-  padding-top: 20px;
+  padding-top: 10px;
+  border-bottom: 2px solid rgb(4, 126, 126);
 }
 .progress-container {
   background-color: burlywood;
@@ -78,6 +82,10 @@ button {
 .heading-lg {
   font-weight: bold;
   font-size: 2rem;
+  cursor: pointer;
+}
+.heading-lg:hover {
+  color: rgba(10, 10, 223, 0.863);
 }
 .heading-sm {
   font-weight: bold;
@@ -169,19 +177,6 @@ button {
   height: 100px;
 }
 
-#codeBox {
-  border: 1px solid black;
-  width: 50%;
-  height: 400px;
-  position: absolute;
-  left: 25%;
-  background-color: rgba(0, 0, 0, 0.8);
-  font-family: Georgia, "Times New Roman", Times, serif;
-  padding: 5px;
+.toggleClass {
   display: none;
-}
-#code {
-  color: white;
-  width: 100%;
-  height: 95%;
 }

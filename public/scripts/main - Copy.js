@@ -70,13 +70,8 @@ function showTopicButtons() {
   let topicsContainer = $(".topics-container")[0];
   topicsContainer.innerHTML = "";
 
-  let count = 0;
   for (let topic in jsonData) {
-    count++;
     topicsContainer.innerHTML += `<button class="topic-btn" onclick="initializeActiveTopic()">${topic}</button>`;
-    if (count % 3 == 0) {
-      topicsContainer.innerHTML += "<br>";
-    }
   }
   topicsContainer.innerHTML += `
   <br><input placeholder="Add Topic...." class="new-topic-input" onkeydown="addTopic()">
@@ -614,6 +609,7 @@ function viewJson() {
   jsonData = localStorage.getItem("myJsonData");
   $("#json-viewer").val(jsonData);
 }
+
 function saveJsonFromLocal() {
   let data = $("#json-from-local").val();
   localStorage.setItem("myJsonData", data);
@@ -621,33 +617,10 @@ function saveJsonFromLocal() {
 
 //Event Listeners
 document.getElementById("btn-view-json").addEventListener("click", function () {
-  // let jsonViewer = document.getElementById("json-viewer");
-  // if (jsonViewer.style.display == "none") jsonViewer.style.display = "block";
-  // else jsonViewer.style.display = "none";
-  $("#json-viewer").toggle();
+  let jsonViewer = document.getElementById("json-viewer");
+  if (jsonViewer.style.display == "none") jsonViewer.style.display = "block";
+  else jsonViewer.style.display = "none";
 });
-
-function download(filename, text) {
-  var element = document.createElement("a");
-  element.setAttribute(
-    "href",
-    "data:text/;charset=utf-8," + encodeURIComponent(text)
-  );
-  element.setAttribute("download", filename);
-
-  element.style.display = "none";
-  document.body.appendChild(element);
-
-  element.click();
-
-  document.body.removeChild(element);
-}
-
-function saveText() {
-  let filename = `LocalJson${Date.now()}.json`;
-  let data = localStorage.getItem("myJsonData");
-  download(filename, data);
-}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
