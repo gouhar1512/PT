@@ -5,8 +5,9 @@ body {
 button {
   cursor: pointer;
   background-color: wheat;
-  margin: 2px;
-  border: 1px solid black;
+  box-shadow: 1px 1px 4px black;
+  margin: 3px;
+  border: 0px solid wheat;
   padding: 3px 5px;
   user-select: none;
 }
